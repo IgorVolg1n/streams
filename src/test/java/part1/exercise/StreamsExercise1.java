@@ -6,6 +6,7 @@ import data.Person;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static data.Generator.generateEmployeeList;
 
@@ -19,7 +20,25 @@ public class StreamsExercise1 {
     @Test
     public void getAllEpamEmployees() {
         List<Employee> epamEmployees = generateEmployeeList();// TODO all persons with experience in epam
-        throw new UnsupportedOperationException();
+        Integer n = 0;
+        for (Employee epamEmployee : epamEmployees) {
+            n++;
+            System.out.println(n.toString() + " " + epamEmployee + "\n");
+        }
+        System.out.println("=================================================");
+        List<Employee> epamers = epamEmployees.stream()
+                .filter(employee ->
+                {
+                    List<String> collected = employee.getJobHistory().stream()
+                            .map(JobHistoryEntry::getEmployer)
+                            .collect(Collectors.toList());
+                    return collected.contains("epam");
+                }).collect(Collectors.toList());
+        n = 0;
+        for (Employee epamer : epamers) {
+            n++;
+            System.out.println(n.toString() + " " + epamer + "\n");
+        }
     }
 
     @Test
